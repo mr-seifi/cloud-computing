@@ -145,6 +145,7 @@ AWS_ACCESS_KEY_ID = os.getenv('STORAGE_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('STORAGE_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
 AWS_S3_ENDPOINT_URL = os.getenv('STORAGE_ENDPOINT_URL')
+AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'advertising.storage_backends.MediaStorage'
 
 AMPQ_URL = os.getenv('AMPQ_URL')
