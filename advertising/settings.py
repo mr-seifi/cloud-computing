@@ -28,7 +28,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    os.getenv('HOST_IP')
+    os.getenv('HOST_IP'),
+    '127.0.0.1',
 ]
 
 INTERNAL_IPS = [
@@ -95,6 +96,12 @@ DATABASES = {
     }
 }
 
+if os.getenv('ENV') == 'dev':
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -134,8 +141,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STORAGE_ACCESS_KEY_ID = os.getenv('STORAGE_ACCESS_KEY')
-STORAGE_SECRET_ACCESS_KEY = os.getenv('STORAGE_SECRET_KEY')
-STORAGE_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
-S3_CUSTOM_DOMAIN = os.getenv('STORAGE_CUSTOM_DOMAIN')
+AWS_ACCESS_KEY_ID = os.getenv('STORAGE_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.getenv('STORAGE_SECRET_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = os.getenv('STORAGE_CUSTOM_DOMAIN')
 DEFAULT_FILE_STORAGE = 'advertising.storage_backends.MediaStorage'
