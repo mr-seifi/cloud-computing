@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'debug_toolbar',
-
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +133,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STORAGE_ACCESS_KEY_ID = os.getenv('STORAGE_ACCESS_KEY')
+STORAGE_SECRET_ACCESS_KEY = os.getenv('STORAGE_SECRET_KEY')
+STORAGE_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
+S3_CUSTOM_DOMAIN = os.getenv('STORAGE_CUSTOM_DOMAIN')
+DEFAULT_FILE_STORAGE = 'advertising.storage_backends.MediaStorage'
