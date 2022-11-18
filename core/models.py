@@ -16,4 +16,5 @@ class Ad(models.Model):
     description = models.TextField()
     cover = models.ImageField()
     category = models.CharField(max_length=255, choices=AdCategory.choices, null=True)
+    approved = models.BooleanField(default=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)

@@ -1,6 +1,7 @@
 import pika
 from django.conf import settings
 import requests
+from .tasks import tag_covers
 
 
 class AMPQService:
@@ -8,9 +9,9 @@ class AMPQService:
     def __init__(self, queue='default'):
         self._ampq_url = settings.AMPQ_URL
         self._queue = queue
+        self._con = pika.BlockingConnection(pika.URLParameters(self._ampq_url))
 
     def _make_channel(self):
-        self._con = pika.BlockingConnection(pika.URLParameters(self._ampq_url))
         channel = self._con.channel()
         channel.queue_declare(queue=self._queue)
 
@@ -21,21 +22,21 @@ class AMPQService:
 
         channel.basic_publish(exchange='', routing_key=self._queue, body=body)
         print(f"[+] Sent {body}")
-        self._con.close()
 
     def consume(self):
-        connection = self._con
-        channel = connection.channel()
-
-        channel.queue_declare(queue=self._queue)
+        channel = self._make_channel()
 
         def callback(ch, method, properties, body):
+            tag_covers.apply_async(args=(body,))
             print(f"[+] Received {body}")
 
-        channel.basic_consume(queue='hello', on_message_callback=callback, auto_ack=True)
+        channel.basic_consume(queue=self._queue, on_message_callback=callback, auto_ack=True)
 
         print('[*] Waiting for messages. To exit press CTRL+C')
         channel.start_consuming()
+
+    def close(self):
+        self._con.close()
 
 
 class ImageProcessingService:
@@ -59,3 +60,20 @@ class ImageProcessingService:
             print(f'Confidence: {confidence}, tag: {tag_name}')
 
         return tags[0]['tag']['en']
+
+
+class MailService:
+
+    def __init__(self):
+        self._api_key = settings.MAILGUN_API_KEY
+        self._domain = settings.MAILGUN_DOMAIN
+
+    def send(self, to, subject, text):
+        return requests.post(
+            f"https://api.mailgun.net/v3/{self._domain}/messages",
+            auth=("api", self._api_key),
+            data={"from": f"<mailgun@>{self._domain}",
+                  "to": [to],
+                  "subject": subject,
+                  "text": text}
+        )
