@@ -26,11 +26,19 @@ def tag_covers(ad_id):
 @shared_task
 def push_rabbitmq(ad_id):
 
-    from .services import AMPQService, MailService
+    from .services import AMQPService, MailService
     ad = Ad.objects.filter(id=ad_id).first()
 
-    ampq_service = AMPQService()
-    ampq_service.publish(ad_id)
+    amqp_service = AMQPService()
+    amqp_service.publish(ad_id)
 
     mail_service = MailService()
     mail_service.send(to=ad.user.email, subject='Ad submitted', text='Your ad submitted successfully!')
+
+
+@shared_task
+def consume():
+
+    from .services import AMQPService
+    amqp_service = AMQPService()
+    amqp_service.consume()

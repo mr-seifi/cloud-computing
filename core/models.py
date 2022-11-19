@@ -18,3 +18,5 @@ class Ad(models.Model):
     category = models.CharField(max_length=255, choices=AdCategory.choices, null=True)
     approved = models.BooleanField(default=False)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)

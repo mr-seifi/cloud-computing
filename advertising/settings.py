@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'storages',
     'rest_framework',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
         },
     },
 ]
@@ -121,6 +125,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -142,10 +150,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_TIMEZONE = TIME_ZONE
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
-
 AWS_ACCESS_KEY_ID = os.getenv('STORAGE_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('STORAGE_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
@@ -153,7 +157,7 @@ AWS_S3_ENDPOINT_URL = os.getenv('STORAGE_ENDPOINT_URL')
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'advertising.storage_backends.MediaStorage'
 
-AMPQ_URL = os.getenv('AMPQ_URL')
+AMQP_URL = os.getenv('AMQP_URL')
 
 IMAGGA_API_KEY = os.getenv('IMAGGA_API_KEY')
 IMAGGA_API_SECRET = os.getenv('IMAGGA_API_SECRET')
@@ -161,3 +165,8 @@ IMAGGA_ENDPOINT_URL = os.getenv('IMAGGA_ENDPOINT_URL')
 
 MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY')
 MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN')
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = 'amqp://localhost'

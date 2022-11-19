@@ -11,4 +11,5 @@ class UserSerializer(ModelSerializer):
 class AdSerializer(ModelSerializer):
     class Meta:
         model = Ad
-        fields = ('id', 'title', 'description', 'cover', 'user',)
+        fields = ('id', 'title', 'description', 'cover', 'user', 'approved',)
+        read_only_fields = ('approved',)

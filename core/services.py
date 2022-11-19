@@ -4,12 +4,12 @@ import requests
 from .tasks import tag_covers
 
 
-class AMPQService:
+class AMQPService:
 
-    def __init__(self, queue='default'):
-        self._ampq_url = settings.AMPQ_URL
+    def __init__(self, queue='default_q'):
+        self._amqp_url = settings.AMQP_URL
         self._queue = queue
-        self._con = pika.BlockingConnection(pika.URLParameters(self._ampq_url))
+        self._con = pika.BlockingConnection(pika.URLParameters(self._amqp_url))
 
     def _make_channel(self):
         channel = self._con.channel()
@@ -27,8 +27,8 @@ class AMPQService:
         channel = self._make_channel()
 
         def callback(ch, method, properties, body):
-            tag_covers.apply_async(args=(body,))
             print(f"[+] Received {body}")
+            tag_covers.apply_async(args=(body.decode(),))
 
         channel.basic_consume(queue=self._queue, on_message_callback=callback, auto_ack=True)
 
