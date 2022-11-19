@@ -17,4 +17,4 @@ class AdViewSet(ModelViewSet):
     def perform_create(self, serializer):
         instance = serializer.save()
 
-        push_rabbitmq.apply_async(args=(instance.id,))
+        push_rabbitmq(instance.id)
