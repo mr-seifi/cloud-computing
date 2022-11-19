@@ -28,7 +28,8 @@ class AMQPService:
 
         def callback(ch, method, properties, body):
             print(f"[+] Received {body}")
-            tag_covers.apply_async(args=(body.decode(),))
+            # tag_covers.apply_async(args=(body.decode(),))
+            tag_covers(body.decode())
 
         channel.basic_consume(queue=self._queue, on_message_callback=callback, auto_ack=True)
 
