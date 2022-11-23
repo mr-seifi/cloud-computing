@@ -29,7 +29,7 @@ def push_rabbitmq(ad_id):
     ad = Ad.objects.filter(id=ad_id).first()
 
     amqp_service = AMQPService()
-    amqp_service.publish(ad_id)
+    amqp_service.publish(str(ad_id))
 
     mail_service = MailService()
     mail_service.send(to=ad.user.email, subject='Ad submitted', text='Your ad submitted successfully!')
