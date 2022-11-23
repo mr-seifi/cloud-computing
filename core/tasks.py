@@ -9,10 +9,10 @@ def tag_covers(ad_id):
     ad = Ad.objects.filter(id=ad_id).first()
 
     img_processing_service = ImageProcessingService()
-    tag = img_processing_service.tags(image_url=ad.cover.url.split('?')[0])
+    tags = img_processing_service.tags(image_url=ad.cover.url.split('?')[0])
 
     mail_service = MailService()
-    if tag == 'car':
+    if 'car' in tags:
         ad.category = 'car'
         ad.approved = True
         ad.save()

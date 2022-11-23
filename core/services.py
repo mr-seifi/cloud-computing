@@ -55,12 +55,15 @@ class ImageProcessingService:
 
         print(response, response.text)
         tags = response.json()['result']['tags']
+        probable_tags = []
         for tag in tags:
             confidence = tag['confidence']
             tag_name = tag['tag']['en']
             print(f'Confidence: {confidence}, tag: {tag_name}')
+            if confidence >= 50:
+                probable_tags.append(tag_name)
 
-        return tags[0]['tag']['en']
+        return probable_tags
 
 
 class MailService:
