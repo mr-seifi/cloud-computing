@@ -23,7 +23,6 @@ def tag_covers(ad_id):
     mail_service.send(to=ad.user.email, subject='Ad response', text='Your ad did not send!')
 
 
-@shared_task
 def push_rabbitmq(ad_id):
 
     from .services import AMQPService, MailService
