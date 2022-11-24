@@ -73,11 +73,12 @@ class MailService:
         self._domain = settings.MAILGUN_DOMAIN
 
     def send(self, to, subject, text):
-        return requests.post(
-            f"https://api.mailgun.net/v3/{self._domain}/messages",
-            auth=("api", self._api_key),
-            data={"from": f"Excited User <mailgun@{self._domain}>",
-                  "to": [to],
-                  "subject": subject,
-                  "text": text}
-        )
+        # return requests.post(
+        #     f"https://api.mailgun.net/v3/{self._domain}/messages",
+        #     auth=("api", self._api_key),
+        #     data={"from": f"Excited User <mailgun@{self._domain}>",
+        #           "to": [to],
+        #           "subject": subject,
+        #           "text": text}
+        # )
+        return
